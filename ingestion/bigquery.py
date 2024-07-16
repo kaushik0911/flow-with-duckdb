@@ -6,6 +6,10 @@ from loguru import logger
 import pandas as pd
 import time
 
+from ingestion.models import PypiJobParameters
+
+PYPI_PUBLIC_DATASET = "bigquery-public-data.pypi.file_downloads"
+
 def get_bigquery_client(project_name: str) -> bigquery.Client:
     """Get Big Query client"""
     try:
@@ -47,14 +51,17 @@ def get_bigquery_result(
         logger.error(f"Error running query: {e}")
         raise
 
-def build_pypi_query() -> str:
+def build_pypi_query(
+    params: PypiJobParameters, pypi_public_dataset: str = PYPI_PUBLIC_DATASET
+) -> str:
     # Query the public PyPI dataset from BigQuery
     # /!\ This is a large dataset, filter accordingly /!\
     return f"""
     SELECT *
-        FROM `bigquery-public-data.pypi.file_downloads`
+    FROM
+        `{pypi_public_dataset}`
     WHERE
-        TIMESTAMP_TRUNC(timestamp, DAY) = TIMESTAMP("2024-07-16") AND
-        project = 'duckdb'
-    LIMIT 1000
+        project = '{params.pypi_project}'
+        AND {params.timestamp_column} >= TIMESTAMP("{params.start_date}")
+        AND {params.timestamp_column} < TIMESTAMP("{params.end_date}")
     """

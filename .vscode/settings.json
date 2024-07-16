@@ -4,6 +4,7 @@
         "dataframe",
         "duckdb",
         "gcloud",
+        "pydantic",
         "virtualenvs"
     ]
 }
