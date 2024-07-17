@@ -4,7 +4,10 @@
         "dataframe",
         "duckdb",
         "gcloud",
+        "Libc",
+        "loguru",
         "pydantic",
+        "rustc",
         "virtualenvs"
     ]
 }
