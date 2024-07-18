@@ -11,7 +11,8 @@ from loguru import logger
 from ingestion.duck import (
     create_table_from_dataframe,
     connect_to_md,
-    write_to_md_from_duckdb
+    write_to_md_from_duckdb,
+    write_to_parquet_from_duckdb
 )
 
 def main(params: PypiJobParameters):
@@ -40,6 +41,14 @@ def main(params: PypiJobParameters):
             timestamp_column=params.timestamp_column,
             start_date=params.start_date,
             end_date=params.end_date,
+        )
+
+    if "parquet" in params.destination:
+        write_to_parquet_from_duckdb(
+            duckdb_con=conn,
+            table=f"{params.table_name}",
+            bucket_path="parquet_bucket",
+            timestamp_column="timestamp"
         )
 
 if __name__ == '__main__':
