@@ -1,6 +1,9 @@
 include .env
 export
 
+DBT_FOLDER = transform/pypi_metrics/
+DBT_TARGET = dev
+
 .PHONY : pypi-ingest format
 
 pypi-ingest: 
@@ -14,6 +17,12 @@ pypi-ingest:
 		--gcp_project $$GCP_PROJECT \
 		--timestamp_column $$TIMESTAMP_COLUMN \
 		--destination $$DESTINATION
+
+pypi-transform:
+	cd $$DBT_FOLDER && \
+	dbt run \
+		--target $$DBT_TARGET \
+		--vars '{"start_date": "$(START_DATE)", "end_date": "$(END_DATE)"}'
 
 format:
 	ruff format .

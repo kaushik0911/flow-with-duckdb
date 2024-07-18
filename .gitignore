@@ -1,4 +1,7 @@
 pypi_file_downloads.csv
+.DS_Store
+.gitkeep
+.user.yml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
