@@ -1,6 +1,10 @@
 from loguru import logger
 
-def create_table_from_dataframe(duckdb_con, table_name: str, dataframe: str):
+def create_table_from_dataframe(
+    duckdb_con,
+    table_name: str,
+    dataframe: str
+):
     duckdb_con.sql(
         f"""
         CREATE TABLE {table_name} AS 
@@ -9,7 +13,10 @@ def create_table_from_dataframe(duckdb_con, table_name: str, dataframe: str):
         """
     )
 
-def connect_to_md(duckdb_con, motherduck_token: str):
+def connect_to_md(
+    duckdb_con,
+    motherduck_token: str
+):
     duckdb_con.sql(f"INSTALL md;")
     duckdb_con.sql(f"LOAD md;")
     duckdb_con.sql(f"SET motherduck_token='{motherduck_token}';")
@@ -42,7 +49,10 @@ def write_to_md_from_duckdb(
     )
 
 def write_to_parquet_from_duckdb(
-    duckdb_con, table: str, bucket_path: str, timestamp_column: str
+    duckdb_con,
+    table: str,
+    bucket_path: str,
+    timestamp_column: str
 ):
     logger.info(f"Writing data to parquet bucket")
     duckdb_con.sql(
@@ -57,3 +67,9 @@ def write_to_parquet_from_duckdb(
         (FORMAT PARQUET, PARTITION_BY (year, month), OVERWRITE_OR_IGNORE 1, COMPRESSION 'ZSTD', ROW_GROUP_SIZE 1000000);
     """
     )
+
+def write_to_csv_from_duckdb(
+    duckdb_con,
+    table: str
+):
+    duckdb_con.sql(f"COPY {table} TO '{table}.csv';")

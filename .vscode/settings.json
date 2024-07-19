@@ -4,12 +4,15 @@
         "dataframe",
         "delim",
         "duckdb",
+        "endmacro",
         "gcloud",
         "Libc",
         "loguru",
+        "MOTHERDUCK",
         "pydantic",
         "pypi",
         "rustc",
-        "virtualenvs"
+        "virtualenvs",
+        "ZSTD"
     ]
 }
