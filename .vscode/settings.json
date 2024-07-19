@@ -12,6 +12,7 @@
         "pydantic",
         "pypi",
         "rustc",
+        "TRUNC",
         "virtualenvs",
         "ZSTD"
     ]
