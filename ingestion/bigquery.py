@@ -5,12 +5,13 @@ from google.auth.exceptions import DefaultCredentialsError
 from loguru import logger
 import pandas as pd
 import time
-
 from ingestion.models import PypiJobParameters
 
 PYPI_PUBLIC_DATASET = "bigquery-public-data.pypi.file_downloads"
 
-def get_bigquery_client(project_name: str) -> bigquery.Client:
+def get_bigquery_client(
+    project_name: str
+) -> bigquery.Client:
     """Get Big Query client"""
     try:
         service_account_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
@@ -30,7 +31,7 @@ def get_bigquery_client(project_name: str) -> bigquery.Client:
 
     except DefaultCredentialsError as creds_error:
         raise creds_error
-    
+
 def get_bigquery_result(
     query_str: str, bigquery_client: bigquery.Client
 ) -> pd.DataFrame:

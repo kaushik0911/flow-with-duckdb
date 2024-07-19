@@ -2,7 +2,9 @@ pypi_file_downloads.csv
 .DS_Store
 .gitkeep
 .user.yml
-
+*.duckdb
+*.csv
+*.parquet
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

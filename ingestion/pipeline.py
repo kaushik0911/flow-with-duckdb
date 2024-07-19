@@ -12,7 +12,8 @@ from ingestion.duck import (
     create_table_from_dataframe,
     connect_to_md,
     write_to_md_from_duckdb,
-    write_to_parquet_from_duckdb
+    write_to_parquet_from_duckdb,
+    write_to_csv_from_duckdb
 )
 
 def main(params: PypiJobParameters):
@@ -28,11 +29,11 @@ def main(params: PypiJobParameters):
     create_table_from_dataframe(conn, params.table_name, "df")
 
     logger.info(f"Sinking data to {params.destination}")
-    if "local" in params.destination:
-        conn.sql(f"COPY {params.table_name} TO '{params.table_name}.csv';")
+    if "local-csv" in params.destination:
+        write_to_csv_from_duckdb(conn, table=params.table_name)
 
     if "md" in params.destination:
-        connect_to_md(conn, os.environ["motherduck_token"])
+        connect_to_md(conn, os.environ["MOTHERDUCK_TOKEN"])
         write_to_md_from_duckdb(
             duckdb_con=conn,
             table=f"{params.table_name}",
@@ -43,11 +44,11 @@ def main(params: PypiJobParameters):
             end_date=params.end_date,
         )
 
-    if "parquet" in params.destination:
+    if "local-parquet" in params.destination:
         write_to_parquet_from_duckdb(
             duckdb_con=conn,
             table=f"{params.table_name}",
-            bucket_path="parquet_bucket",
+            bucket_path=os.environ["TRANSFORM_S3_PATH_INPUT"],
             timestamp_column="timestamp"
         )
 

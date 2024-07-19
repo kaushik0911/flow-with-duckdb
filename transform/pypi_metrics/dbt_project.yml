@@ -33,4 +33,5 @@ models:
   pypi_metrics:
     pypi_daily_stats:
       +materialized: table
+      +post-hook: "{{export_partition_data('download_date', this.name)}}"
     # Config indicated by + and applies to all files under models/example/
